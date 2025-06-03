@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>リアルタイム物体認識</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .video-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .video-feed {
+            width: 100%;
+            height: auto;
+        }
+        .analysis-container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .analysis-text {
+            font-size: 18px;
+            line-height: 1.5;
+            color: #333;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>リアルタイム物体認識</h1>
+        <div class="video-container">
+            <img src="{{ url_for('video_feed') }}" class="video-feed" alt="Webcam feed">
+        </div>
+        <button class="button" onclick="analyzeCurrentFrame()">現在のフレームを分析</button>
+        <div class="analysis-container">
+            <h2>分析結果:</h2>
+            <p id="analysis" class="analysis-text">分析結果がここに表示されます...</p>
+        </div>
+    </div>
+
+    <script>
+        function analyzeCurrentFrame() {
+            fetch('/analyze_frame')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('analysis').textContent = data.text;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('analysis').textContent = 'エラーが発生しました。';
+                });
+        }
+    </script>
+</body>
+</html> 
