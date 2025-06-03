@@ -53,7 +53,9 @@ def video_feed():
 
 @app.route('/analyze_frame')
 def analyze_frame():
-    camera = cv2.VideoCapture(0)
+    camera = cv2.VideoCapture(1)
+    if not camera.isOpened():
+        return jsonify({'text': 'カメラが開けませんでした'})
     success, frame = camera.read()
     camera.release()
     
